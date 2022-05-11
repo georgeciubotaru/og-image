@@ -56,6 +56,8 @@ function getCss(theme: string, fontSize: string) {
 
     .wrapper {
         display: flex;
+        width: 1024px;
+        height: 768px;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -109,7 +111,7 @@ function getCss(theme: string, fontSize: string) {
     .description {
         margin: 0;
         font-family: 'Fira Sans', sans-serif;
-        font-size: 20px;
+        font-size: 40px;
         font-style: normal;
         color: ${foreground};
         line-height: 1.36;

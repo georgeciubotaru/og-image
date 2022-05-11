@@ -87,6 +87,10 @@ function getCss(theme: string, fontSize: string) {
         margin: 150px;
     }
 
+    .spacer.mu1_2 {
+        margin-bottom: 13.6px
+    }
+
     .emoji {
         height: 1em;
         width: 1em;
@@ -99,12 +103,20 @@ function getCss(theme: string, fontSize: string) {
         font-size: ${sanitizeHtml(fontSize)};
         font-style: normal;
         color: ${foreground};
-        line-height: 1.8;
+        line-height: 1.15;
+    }
+
+    .description {
+        font-family: 'Inter', sans-serif;
+        font-size: 20px;
+        font-style: normal;
+        color: ${foreground};
+        line-height: 1.36;
     }`;
 }
 
 export function getHtml(parsedReq: ParsedRequest) {
-    const { text, theme, md, fontSize, images, widths, heights } = parsedReq;
+    const { text, theme, md, fontSize, images, widths, heights, description } = parsedReq;
     return `<!DOCTYPE html>
 <html>
     <meta charset="utf-8">
@@ -118,20 +130,21 @@ export function getHtml(parsedReq: ParsedRequest) {
             <div class="spacer">
             <div class="logo-wrapper">
                 ${images.map((img, i) =>
-                    getPlusSign(i) + getImage(img, widths[i], heights[i])
-                ).join('')}
+        getPlusSign(i) + getImage(img, widths[i], heights[i])
+    ).join('')}
             </div>
-            <div class="spacer">
+            <div class="spacer mu1_2">
             <div class="heading">${emojify(
-                md ? marked(text) : sanitizeHtml(text)
-            )}
+        md ? marked(text) : sanitizeHtml(text)
+    )}
             </div>
+            <p class="description">${sanitizeHtml(description)}</p>
         </div>
     </body>
 </html>`;
 }
 
-function getImage(src: string, width ='auto', height = '225') {
+function getImage(src: string, width = 'auto', height = '225') {
     return `<img
         class="logo"
         alt="Generated Image"

@@ -184,11 +184,11 @@ const App = (_: any, state: AppState, setState: SetState) => {
     };
     const {
         fileType = 'png',
-        fontSize = '100px',
-        theme = 'light',
+        fontSize = '50px',
+        theme = 'dark',
         md = true,
-        description = '',
-        text = '**Hello** World',
+        description = 'Borrow against real-world assets as a collateral',
+        text = '# Amplify Protocol',
         images = [imageLightOptions[0].value],
         widths = [],
         heights = [],

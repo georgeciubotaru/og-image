@@ -3,37 +3,32 @@ import { readFileSync } from 'fs';
 import { marked } from 'marked';
 import { sanitizeHtml } from './sanitizer';
 import { ParsedRequest } from './types';
-const twemoji = require('twemoji');
-const twOptions = { folder: 'svg', ext: '.svg' };
-const emojify = (text: string) => twemoji.parse(text, twOptions);
 
-const rglr = readFileSync(`${__dirname}/../_fonts/Inter-Regular.woff2`).toString('base64');
-const bold = readFileSync(`${__dirname}/../_fonts/Inter-Bold.woff2`).toString('base64');
+const rglr = readFileSync(`${__dirname}/../_fonts/Fira-Sans-Regular.woff2`).toString('base64');
+const medm = readFileSync(`${__dirname}/../_fonts/Fira-Sans-Medium.woff2`).toString('base64');
 const mono = readFileSync(`${__dirname}/../_fonts/Vera-Mono.woff2`).toString('base64');
 
 function getCss(theme: string, fontSize: string) {
-    let background = 'white';
+    let background = '#fff';
     let foreground = 'black';
-    let radial = 'lightgray';
 
     if (theme === 'dark') {
-        background = 'black';
+        background = '#161b28';
         foreground = 'white';
-        radial = 'dimgray';
     }
     return `
     @font-face {
-        font-family: 'Inter';
+        font-family: 'Fira Sans';
         font-style:  normal;
         font-weight: normal;
         src: url(data:font/woff2;charset=utf-8;base64,${rglr}) format('woff2');
     }
 
     @font-face {
-        font-family: 'Inter';
+        font-family: 'Fira Sans';
         font-style:  normal;
-        font-weight: bold;
-        src: url(data:font/woff2;charset=utf-8;base64,${bold}) format('woff2');
+        font-weight: 500;
+        src: url(data:font/woff2;charset=utf-8;base64,${medm}) format('woff2');
     }
 
     @font-face {
@@ -45,11 +40,23 @@ function getCss(theme: string, fontSize: string) {
 
     body {
         background: ${background};
-        background-image: radial-gradient(circle at 25px 25px, ${radial} 2%, transparent 0%), radial-gradient(circle at 75px 75px, ${radial} 2%, transparent 0%);
-        background-size: 100px 100px;
         height: 100vh;
         display: flex;
         text-align: center;
+        align-items: center;
+        justify-content: center;
+        -webkit-overflow-scrolling: touch;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-text-size-adjust: 100%;
+        text-rendering: optimizeLegibility;
+        font-feature-settings: 'pnum';
+        font-variant-numeric: proportional-nums;
+    }
+
+    .wrapper {
+        display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
     }
@@ -83,31 +90,24 @@ function getCss(theme: string, fontSize: string) {
         font-size: 100px;
     }
 
-    .spacer {
-        margin: 150px;
-    }
-
-    .spacer.mu1_2 {
+    .mu1_2 {
         margin-bottom: 13.6px
     }
-
-    .emoji {
-        height: 1em;
-        width: 1em;
-        margin: 0 .05em 0 .1em;
-        vertical-align: -0.1em;
+    .mu1 {
+        margin-bottom: 27.2px
     }
     
     .heading {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Fira Sans', sans-serif;
         font-size: ${sanitizeHtml(fontSize)};
-        font-style: normal;
+        font-style: 500;
         color: ${foreground};
         line-height: 1.15;
     }
 
     .description {
-        font-family: 'Inter', sans-serif;
+        margin: 0;
+        font-family: 'Fira Sans', sans-serif;
         font-size: 20px;
         font-style: normal;
         color: ${foreground};
@@ -126,18 +126,15 @@ export function getHtml(parsedReq: ParsedRequest) {
         ${getCss(theme, fontSize)}
     </style>
     <body>
-        <div>
-            <div class="spacer">
+        <div class="wrapper">
             <div class="logo-wrapper">
                 ${images.map((img, i) =>
         getPlusSign(i) + getImage(img, widths[i], heights[i])
     ).join('')}
             </div>
-            <div class="spacer mu1_2">
-            <div class="heading">${emojify(
-        md ? marked(text) : sanitizeHtml(text)
-    )}
-            </div>
+            <div class="mu1"></div>
+            <div class="heading">${md ? marked(text) : sanitizeHtml(text)}</div>
+            <div class="mu1_2"></div>
             <p class="description">${sanitizeHtml(description)}</p>
         </div>
     </body>
